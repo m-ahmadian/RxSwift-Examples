@@ -28,6 +28,7 @@
 
 import UIKit
 import Photos
+import RxSwift
 
 class PhotosViewController: UICollectionViewController {
 
@@ -36,6 +37,10 @@ class PhotosViewController: UICollectionViewController {
   // MARK: private properties
   private lazy var photos = PhotosViewController.loadPhotos()
   private lazy var imageManager = PHCachingImageManager()
+  private let selectedPhotosSubject = PublishSubject<UIImage>()
+  var selectedPhotos: Observable<UIImage> {
+    return selectedPhotosSubject.asObservable()
+  }
 
   private lazy var thumbnailSize: CGSize = {
     let cellSize = (self.collectionViewLayout as! UICollectionViewFlowLayout).itemSize
@@ -90,6 +95,10 @@ class PhotosViewController: UICollectionViewController {
 
     imageManager.requestImage(for: asset, targetSize: view.frame.size, contentMode: .aspectFill, options: nil, resultHandler: { [weak self] image, info in
       guard let image = image, let info = info else { return }
+      
+      if let isThumbnail = info[PHImageResultIsDegradedKey as NSString] as? Bool, !isThumbnail {
+        self?.selectedPhotosSubject.onNext(image)
+      }
       
     })
   }
