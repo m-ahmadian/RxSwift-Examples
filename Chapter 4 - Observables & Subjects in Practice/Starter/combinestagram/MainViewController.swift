@@ -66,8 +66,15 @@ class MainViewController: UIViewController {
   }
 
   @IBAction func actionAdd() {
-    let newImages = images.value + [UIImage(named: "IMG_1907.jpg")!]
-    images.accept(newImages)
+//    let newImages = images.value + [UIImage(named: "IMG_1907.jpg")!]
+    if #available(iOS 13.0, *) {
+      let photosViewController = storyboard!.instantiateViewController(identifier: "PhotosViewController") as! PhotosViewController
+      
+      navigationController!.pushViewController(photosViewController, animated: true)
+    } else {
+      // Fallback on earlier versions
+    }
+    // images.accept(newImages)
   }
 
   func showMessage(_ title: String, description: String? = nil) {
