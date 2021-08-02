@@ -46,7 +46,7 @@ class MainViewController: UIViewController {
   }
   
   @IBAction func actionClear() {
-
+    images.accept([])
   }
 
   @IBAction func actionSave() {
@@ -54,7 +54,8 @@ class MainViewController: UIViewController {
   }
 
   @IBAction func actionAdd() {
-    
+    let newImages = images.value + [UIImage(named: "IMG_1907.jpg")!]
+    images.accept(newImages)
   }
 
   func showMessage(_ title: String, description: String? = nil) {
