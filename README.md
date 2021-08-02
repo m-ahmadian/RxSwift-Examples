@@ -2,9 +2,9 @@
 
 This repository contains my practice playgrounds from the book "RxSwift: Reactive Programming with Swift":
 
-**RxSwift: Reactive Programming with Swift**
-Third Edition
-By the raywenderlich.com Tutorial Team
+**RxSwift: Reactive Programming with Swift**\
+Third Edition\
+By the raywenderlich.com Tutorial Team\
 Florent Pillet, Junior Bontognali, Marin Todorov & Scott Gardner
 
 * Swift 4.2
