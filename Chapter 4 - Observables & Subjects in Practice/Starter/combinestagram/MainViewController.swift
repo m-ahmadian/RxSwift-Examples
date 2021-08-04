@@ -70,6 +70,18 @@ class MainViewController: UIViewController {
     if #available(iOS 13.0, *) {
       let photosViewController = storyboard!.instantiateViewController(identifier: "PhotosViewController") as! PhotosViewController
       
+      photosViewController.selectedPhotos
+        .subscribe(
+          onNext: { [weak self] newImage in
+            guard let images = self?.images else { return }
+            images.accept(images.value + [newImage])
+          },
+          onDisposed: {
+            print("complete photo selection")
+          }
+        )
+        .disposed(by: bag)
+      
       navigationController!.pushViewController(photosViewController, animated: true)
     } else {
       // Fallback on earlier versions
