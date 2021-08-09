@@ -173,6 +173,54 @@ example(of: "takeUntil") {
     subject.onNext("3")
 }
 
+// MARK: - Distinct operators
+
+example(of: "distinctUntilChanged") {
+    let disposeBag = DisposeBag()
+
+    // 1
+    Observable.of("A", "A", "B", "B", "A")
+        // 2
+        .distinctUntilChanged()
+        .subscribe(onNext: {
+            print($0)
+        })
+        .disposed(by: disposeBag)
+}
+
+example(of: "distinctUntilChanged(_:)") {
+    let disposeBag = DisposeBag()
+
+    // 1
+    let formatter = NumberFormatter()
+    formatter.numberStyle = .spellOut
+
+    // 2
+    Observable<NSNumber>.of(10, 110, 20, 200, 210, 310)
+        // 3
+        .distinctUntilChanged { a, b in
+            // 4
+            guard let aWords = formatter.string(from: a)?.components(separatedBy: " "), let bWords = formatter.string(from: b)?.components(separatedBy: " ") else {
+                return false
+            }
+
+            var containsMatch = false
+
+            // 5
+            for aWord in aWords where bWords.contains(aWord) {
+                containsMatch = true
+                break
+            }
+
+            return containsMatch
+        }
+        // 4
+        .subscribe(onNext: {
+            print($0)
+        })
+        .disposed(by: disposeBag)
+}
+
 /*:
  Copyright (c) 2019 Razeware LLC
 
