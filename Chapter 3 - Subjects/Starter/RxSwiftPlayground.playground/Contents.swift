@@ -5,220 +5,62 @@ import PlaygroundSupport
 
 playgroundShouldContinueIndefinitely()
 
-// MARK: - Chapter 5 - Filtering Operators
+// MARK: - Chapter 5 - Challenge: Create a phone number lookup
 
-// MARK: - Ignoring operators
-
-example(of: "ignoreElements") {
-    // 1
-    let strikes = PublishSubject<String>()
+example(of: "Challenge 1") {
 
     let disposeBag = DisposeBag()
 
-    // 2
-    strikes
-        .ignoreElements()
-        .subscribe { _ in
-            print("You're out!")
-        }
-        .disposed(by: disposeBag)
+    let contacts = [
+        "603-555-1212": "Florent",
+        "212-555-1212": "Junior",
+        "408-555-1212": "Marin",
+        "617-555-1212": "Scott",
+    ]
 
-    strikes.onNext("X")
-    strikes.onNext("X")
-    strikes.onNext("X")
-    strikes.onCompleted()
-}
+    func phoneNumber(from inputs: [Int]) -> String {
+        var phone = inputs.map(String.init).joined()
 
-example(of: "elementAt") {
+        phone.insert("-", at: phone.index(phone.startIndex, offsetBy: 3))
 
-    // 1
-    let strikes = PublishSubject<String>()
+        phone.insert("-", at: phone.index(phone.startIndex, offsetBy: 7))
 
-    let disposeBag = DisposeBag()
+        return phone
+    }
 
-    // 2
-    strikes
-        .element(at: 2)
-        .subscribe(onNext: { _ in
-            print("You're out!")
-        })
-        .disposed(by: disposeBag)
+    let input = PublishSubject<Int>()
 
-    strikes.onNext("X")
-    strikes.onNext("X")
-    strikes.onNext("X")
-}
+    input
+        .skip(while: { $0 == 0})
+        .filter({ $0 < 10})
+        .take(10)
+        .toArray()
+        .subscribe(onSuccess: {
+            let phone = phoneNumber(from: $0)
 
-example(of: "filter") {
-    let disposeBag = DisposeBag()
-
-    // 1
-    Observable.of(1, 2, 3, 4, 5, 6)
-    // 2
-        .filter { $0 % 2 == 0}
-    // 3
-        .subscribe(onNext: {
-            print($0)
-        })
-        .disposed(by: disposeBag)
-}
-
-// MARK: - Skipping operators
-
-example(of: "skip") {
-    let dispseBag = DisposeBag()
-
-    // 1
-    Observable.of("A", "B", "C", "D", "E", "F")
-    // 2
-        .skip(3)
-        .subscribe(onNext: {
-            print($0)
-        })
-        .disposed(by: dispseBag)
-}
-
-example(of: "skipWhile") {
-    let disposeBag = DisposeBag()
-
-    // 1
-    Observable.of(2, 2, 3, 4, 4)
-    // 2
-        .skip(while: { $0 % 2 == 0 })
-        .subscribe(onNext: {
-            print($0)
-        })
-        .disposed(by: disposeBag)
-}
-
-example(of: "skipUntil") {
-    let disposeBag = DisposeBag()
-
-    // 1
-    let subject = PublishSubject<String>()
-    let trigger = PublishSubject<String>()
-
-    // 2
-    subject
-        .skip(until: trigger)
-        .subscribe(onNext: {
-            print($0)
-        })
-        .disposed(by: disposeBag)
-
-    subject.onNext("A")
-    subject.onNext("B")
-
-    trigger.onNext("X")
-
-    subject.onNext("C")
-}
-
-// MARK: - Taking operators
-
-example(of: "take") {
-    let disposedBag = DisposeBag()
-
-    // 1
-    Observable.of(1, 2, 3, 4, 5, 6)
-        // 2
-        .take(3)
-        .subscribe(onNext: {
-            print($0)
-        })
-        .disposed(by: disposedBag)
-}
-
-example(of: "takeWhile") {
-    let disposeBag = DisposeBag()
-
-    // 1
-    Observable.of(2, 2, 4, 4, 6, 6)
-        // 2
-        .enumerated()
-        // 3
-        .take(while: { index, integer in
-            // 4
-            integer % 2 == 0 && index < 3
-        })
-    // 5
-        .map { $0.element }
-    // 6
-        .subscribe(onNext: {
-            print($0)
-        })
-        .disposed(by: disposeBag)
-}
-
-example(of: "takeUntil") {
-    let disposeBag = DisposeBag()
-
-    // 1
-    let subject = PublishSubject<String>()
-    let trigger = PublishSubject<String>()
-
-    // 2
-    subject
-        .take(until: trigger)
-        .subscribe(onNext: {
-            print($0)
-        })
-        .disposed(by: disposeBag)
-
-    // 3
-    subject.onNext("1")
-    subject.onNext("2")
-
-    trigger.onNext("X")
-    subject.onNext("3")
-}
-
-// MARK: - Distinct operators
-
-example(of: "distinctUntilChanged") {
-    let disposeBag = DisposeBag()
-
-    // 1
-    Observable.of("A", "A", "B", "B", "A")
-        // 2
-        .distinctUntilChanged()
-        .subscribe(onNext: {
-            print($0)
-        })
-        .disposed(by: disposeBag)
-}
-
-example(of: "distinctUntilChanged(_:)") {
-    let disposeBag = DisposeBag()
-
-    // 1
-    let formatter = NumberFormatter()
-    formatter.numberStyle = .spellOut
-
-    // 2
-    Observable<NSNumber>.of(10, 110, 20, 200, 210, 310)
-        // 3
-        .distinctUntilChanged { a, b in
-            // 4
-            guard let aWords = formatter.string(from: a)?.components(separatedBy: " "), let bWords = formatter.string(from: b)?.components(separatedBy: " ") else {
-                return false
+            if let contact = contacts[phone] {
+                print("Dialing \(contact) (\(phone))...")
+            } else {
+                print("Contact not found")
             }
-
-            var containsMatch = false
-
-            // 5
-            for aWord in aWords where bWords.contains(aWord) {
-                containsMatch = true
-                break
-            }
-
-            return containsMatch
-        }
-        // 4
-        .subscribe(onNext: {
-            print($0)
         })
         .disposed(by: disposeBag)
+
+    input.onNext(0)
+    input.onNext(603)
+
+    input.onNext(2)
+    input.onNext(1)
+
+    // Confirm that 7 results in "Contact not found," and then change to 2 and confirm that Junior is found
+    input.onNext(7)
+
+    "5551212".forEach {
+        if let number = (Int("\($0)")) {
+            input.onNext(number)
+        }
+    }
+    input.onNext(9)
 }
 
 /*:
