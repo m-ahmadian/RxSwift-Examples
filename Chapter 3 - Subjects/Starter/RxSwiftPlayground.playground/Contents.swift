@@ -114,6 +114,65 @@ example(of: "skipUntil") {
     subject.onNext("C")
 }
 
+// MARK: - Taking operators
+
+example(of: "take") {
+    let disposedBag = DisposeBag()
+
+    // 1
+    Observable.of(1, 2, 3, 4, 5, 6)
+        // 2
+        .take(3)
+        .subscribe(onNext: {
+            print($0)
+        })
+        .disposed(by: disposedBag)
+}
+
+example(of: "takeWhile") {
+    let disposeBag = DisposeBag()
+
+    // 1
+    Observable.of(2, 2, 4, 4, 6, 6)
+        // 2
+        .enumerated()
+        // 3
+        .take(while: { index, integer in
+            // 4
+            integer % 2 == 0 && index < 3
+        })
+    // 5
+        .map { $0.element }
+    // 6
+        .subscribe(onNext: {
+            print($0)
+        })
+        .disposed(by: disposeBag)
+}
+
+example(of: "takeUntil") {
+    let disposeBag = DisposeBag()
+
+    // 1
+    let subject = PublishSubject<String>()
+    let trigger = PublishSubject<String>()
+
+    // 2
+    subject
+        .take(until: trigger)
+        .subscribe(onNext: {
+            print($0)
+        })
+        .disposed(by: disposeBag)
+
+    // 3
+    subject.onNext("1")
+    subject.onNext("2")
+
+    trigger.onNext("X")
+    subject.onNext("3")
+}
+
 /*:
  Copyright (c) 2019 Razeware LLC
 
