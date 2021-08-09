@@ -7,6 +7,60 @@ playgroundShouldContinueIndefinitely()
 
 // MARK: - Chapter 5 - Filtering Operators
 
+example(of: "ignoreElements") {
+    // 1
+    let strikes = PublishSubject<String>()
+
+    let disposeBag = DisposeBag()
+
+    // 2
+    strikes
+        .ignoreElements()
+        .subscribe { _ in
+            print("You're out!")
+        }
+        .disposed(by: disposeBag)
+
+    strikes.onNext("X")
+    strikes.onNext("X")
+    strikes.onNext("X")
+    strikes.onCompleted()
+}
+
+example(of: "elementAt") {
+
+    // 1
+    let strikes = PublishSubject<String>()
+
+    let disposeBag = DisposeBag()
+
+    // 2
+    strikes
+        .element(at: 2)
+        .subscribe(onNext: { _ in
+            print("You're out!")
+        })
+        .disposed(by: disposeBag)
+
+    strikes.onNext("X")
+    strikes.onNext("X")
+    strikes.onNext("X")
+}
+
+example(of: "filter") {
+    let disposeBag = DisposeBag()
+
+    // 1
+    Observable.of(1, 2, 3, 4, 5, 6)
+    // 2
+        .filter { $0 % 2 == 0}
+    // 3
+        .subscribe(onNext: {
+            print($0)
+        })
+        .disposed(by: disposeBag)
+}
+
 /*:
  Copyright (c) 2019 Razeware LLC
 
