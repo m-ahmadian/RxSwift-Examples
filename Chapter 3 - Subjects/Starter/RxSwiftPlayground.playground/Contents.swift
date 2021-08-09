@@ -7,6 +7,8 @@ playgroundShouldContinueIndefinitely()
 
 // MARK: - Chapter 5 - Filtering Operators
 
+// MARK: - Ignoring operators
+
 example(of: "ignoreElements") {
     // 1
     let strikes = PublishSubject<String>()
@@ -59,6 +61,57 @@ example(of: "filter") {
             print($0)
         })
         .disposed(by: disposeBag)
+}
+
+// MARK: - Skipping operators
+
+example(of: "skip") {
+    let dispseBag = DisposeBag()
+
+    // 1
+    Observable.of("A", "B", "C", "D", "E", "F")
+    // 2
+        .skip(3)
+        .subscribe(onNext: {
+            print($0)
+        })
+        .disposed(by: dispseBag)
+}
+
+example(of: "skipWhile") {
+    let disposeBag = DisposeBag()
+
+    // 1
+    Observable.of(2, 2, 3, 4, 4)
+    // 2
+        .skip(while: { $0 % 2 == 0 })
+        .subscribe(onNext: {
+            print($0)
+        })
+        .disposed(by: disposeBag)
+}
+
+example(of: "skipUntil") {
+    let disposeBag = DisposeBag()
+
+    // 1
+    let subject = PublishSubject<String>()
+    let trigger = PublishSubject<String>()
+
+    // 2
+    subject
+        .skip(until: trigger)
+        .subscribe(onNext: {
+            print($0)
+        })
+        .disposed(by: disposeBag)
+
+    subject.onNext("A")
+    subject.onNext("B")
+
+    trigger.onNext("X")
+
+    subject.onNext("C")
 }
 
 /*:
