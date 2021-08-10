@@ -10,7 +10,7 @@ Florent Pillet, Junior Bontognali, Marin Todorov & Scott Gardner
 * Swift 4.2
 * RxSwift 4.0
 * RxCocoa 4.0
-* Xcode 10.1
+* Xcode 12.5
 
 ### Overview:
 
