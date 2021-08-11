@@ -39,6 +39,7 @@ class MainViewController: UIViewController {
   
   private let bag = DisposeBag()
   private let images = BehaviorRelay<[UIImage]>(value: [])
+  private var imageCache = [Int]()
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -59,6 +60,7 @@ class MainViewController: UIViewController {
   
   @IBAction func actionClear() {
     images.accept([])
+    imageCache = []
   }
 
   @IBAction func actionSave() {
@@ -90,6 +92,16 @@ class MainViewController: UIViewController {
         .filter({ newImage in
           return newImage.size.width > newImage.size.height
         })
+
+        .filter({ [weak self] newImage in
+          let len = newImage.pngData()?.count ?? 0
+          guard self?.imageCache.contains(len) == false else {
+            return false
+          }
+          self?.imageCache.append(len)
+          return true
+        })
+
         .subscribe(
           onNext: { [weak self] newImage in
             guard let images = self?.images else { return }
