@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2B528B1C26C0E28500A58DD3 /* UIViewController Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B528B1B26C0E28500A58DD3 /* UIViewController Extension.swift */; };
+		2B9BF3E326C4926A00268913 /* PHPhotoLibrary+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B9BF3E226C4926A00268913 /* PHPhotoLibrary+Rx.swift */; };
 		9CDD7B041DE5AABE0058B2D5 /* UIImage+Collage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CDD7B031DE5AABE0058B2D5 /* UIImage+Collage.swift */; };
 		9CDD7B061DE5BC660058B2D5 /* PhotosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CDD7B051DE5BC660058B2D5 /* PhotosViewController.swift */; };
 		9CDD7B081DE6D7ED0058B2D5 /* PhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CDD7B071DE6D7ED0058B2D5 /* PhotoCell.swift */; };
@@ -22,7 +23,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		2B528B1B26C0E28500A58DD3 /* UIViewController Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "UIViewController Extension.swift"; path = "combinestagram/UIViewController Extension.swift"; sourceTree = SOURCE_ROOT; };
+		2B528B1B26C0E28500A58DD3 /* UIViewController Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "UIViewController Extension.swift"; path = "Combinestagram/UIViewController Extension.swift"; sourceTree = SOURCE_ROOT; };
+		2B9BF3E226C4926A00268913 /* PHPhotoLibrary+Rx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "PHPhotoLibrary+Rx.swift"; path = "combinestagram/PHPhotoLibrary+Rx.swift"; sourceTree = SOURCE_ROOT; };
 		620D9F0EA9DB5331C784E2F2 /* Pods_Combinestagram.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Combinestagram.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7FC7E7829AC98F7C97932692 /* Pods-Combinestagram.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Combinestagram.release.xcconfig"; path = "Target Support Files/Pods-Combinestagram/Pods-Combinestagram.release.xcconfig"; sourceTree = "<group>"; };
 		9CDD7B031DE5AABE0058B2D5 /* UIImage+Collage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = "UIImage+Collage.swift"; sourceTree = "<group>"; };
@@ -76,7 +78,6 @@
 				9CE7E5E51DE5A40A00C8BA5A /* Assets.xcassets */,
 				9CE7E5E71DE5A40A00C8BA5A /* LaunchScreen.storyboard */,
 				9CE7E5EA1DE5A40A00C8BA5A /* Info.plist */,
-				2B528B1B26C0E28500A58DD3 /* UIViewController Extension.swift */,
 			);
 			name = Assets;
 			sourceTree = "<group>";
@@ -120,6 +121,8 @@
 				9CE7E5DE1DE5A40A00C8BA5A /* MainViewController.swift */,
 				9CDD7B051DE5BC660058B2D5 /* PhotosViewController.swift */,
 				9CDD7B071DE6D7ED0058B2D5 /* PhotoCell.swift */,
+				2B528B1B26C0E28500A58DD3 /* UIViewController Extension.swift */,
+				2B9BF3E226C4926A00268913 /* PHPhotoLibrary+Rx.swift */,
 			);
 			path = Combinestagram;
 			sourceTree = "<group>";
@@ -254,6 +257,7 @@
 				9CDD7B0C1DE6E3D30058B2D5 /* PhotoWriter.swift in Sources */,
 				2B528B1C26C0E28500A58DD3 /* UIViewController Extension.swift in Sources */,
 				9CE7E5DF1DE5A40A00C8BA5A /* MainViewController.swift in Sources */,
+				2B9BF3E326C4926A00268913 /* PHPhotoLibrary+Rx.swift in Sources */,
 				9CE7E5DD1DE5A40A00C8BA5A /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
