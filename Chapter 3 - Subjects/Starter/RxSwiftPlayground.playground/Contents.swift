@@ -63,6 +63,46 @@ example(of: "Challenge 1") {
     input.onNext(9)
 }
 
+example(of: "Test") {
+    let disposeBag = DisposeBag()
+    var start = 0
+    func getStart() -> Int {
+        start += 1
+        return start
+    }
+
+    let numbers = Observable<Int>.create { observer in
+        let start = getStart()
+        observer.onNext(start)
+        observer.onNext(start+1)
+        observer.onNext(start+2)
+        observer.onCompleted()
+        return Disposables.create()
+    }
+
+    numbers
+        .subscribe(
+            onNext: { el in
+                print("element [\(el)]")
+            },
+            onCompleted: {
+                print("--------")
+            }
+        )
+
+    numbers
+        .subscribe(
+            onNext: { el in
+                print("element [\(el)]")
+            },
+            onCompleted: {
+                print("--------")
+            }
+        )
+
+        .disposed(by: disposeBag)
+}
+
 /*:
  Copyright (c) 2019 Razeware LLC
 
