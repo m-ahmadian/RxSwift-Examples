@@ -86,17 +86,24 @@ class MainViewController: UIViewController {
       let newPhotos = photosViewController.selectedPhotos
         .share()
 
-        newPhotos
-          .subscribe(
-            onNext: { [weak self] newImage in
-              guard let images = self?.images else { return }
-              images.accept(images.value + [newImage])
-            },
-            onDisposed: {
-              print("complete photo selection")
-            }
-          )
-          .disposed(by: bag)
+      newPhotos
+        .subscribe(
+          onNext: { [weak self] newImage in
+            guard let images = self?.images else { return }
+            images.accept(images.value + [newImage])
+          },
+          onDisposed: {
+            print("complete photo selection")
+          }
+        )
+        .disposed(by: bag)
+
+      newPhotos
+        .ignoreElements()
+        .subscribe(onCompleted: { [weak self] in
+          self?.updateNavigationIcon()
+        })
+        .disposed(by: bag)
       
       navigationController!.pushViewController(photosViewController, animated: true)
     } else {
@@ -116,5 +123,13 @@ class MainViewController: UIViewController {
     buttonClear.isEnabled = photos.count > 0
     itemAdd.isEnabled = photos.count < 6
     title = photos.count > 0 ? "\(photos.count) photos" : "Collage"
+  }
+
+  private func updateNavigationIcon() {
+    let icon = imagePreview.image?
+      .scaled(CGSize(width: 22, height: 22))
+      .withRenderingMode(.alwaysOriginal)
+
+    navigationItem.leftBarButtonItem = UIBarButtonItem(image: icon, style: .done, target: nil, action: nil)
   }
 }
