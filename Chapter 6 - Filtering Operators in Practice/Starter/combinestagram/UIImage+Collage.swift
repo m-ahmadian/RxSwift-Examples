@@ -29,10 +29,11 @@
 import Foundation
 import UIKit
 
-extension Array where Element == UIImage {
-  func collage(size: CGSize) -> UIImage {
-    let rows = self.count < 3 ? 1 : 2
-    let columns = Int(round(Double(self.count) / Double(rows)))
+extension UIImage {
+
+  static func collage(images: [UIImage], size: CGSize) -> UIImage {
+    let rows = images.count < 3 ? 1 : 2
+    let columns = Int(round(Double(images.count) / Double(rows)))
     let tileSize = CGSize(width: round(size.width / CGFloat(columns)),
                           height: round(size.height / CGFloat(rows)))
 
@@ -40,7 +41,7 @@ extension Array where Element == UIImage {
     UIColor.white.setFill()
     UIRectFill(CGRect(origin: .zero, size: size))
 
-    for (index, image) in self.enumerated() {
+    for (index, image) in images.enumerated() {
       image.scaled(tileSize).draw(at: CGPoint(
         x: CGFloat(index % columns) * tileSize.width,
         y: CGFloat(index / columns) * tileSize.height
@@ -51,9 +52,7 @@ extension Array where Element == UIImage {
     UIGraphicsEndImageContext()
     return image ?? UIImage()
   }
-}
 
-extension UIImage {
   func scaled(_ newSize: CGSize) -> UIImage {
     guard size != newSize else {
       return self

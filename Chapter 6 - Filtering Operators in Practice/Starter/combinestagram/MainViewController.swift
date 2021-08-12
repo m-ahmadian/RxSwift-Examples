@@ -44,10 +44,11 @@ class MainViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    images
-      .subscribe(onNext: { [weak imagePreview] photos in
-        guard let preview = imagePreview else { return}
-        preview.image = photos.collage(size: preview.frame.size)
+    images.asObservable()
+      .throttle(RxTimeInterval.seconds(Int(0.5)), scheduler: MainScheduler.instance)
+      .subscribe(onNext: { [weak self] photos in
+        guard let preview = self?.imagePreview else { return}
+        preview.image = UIImage.collage(images: photos, size: preview.frame.size)
       })
       .disposed(by: bag)
     
