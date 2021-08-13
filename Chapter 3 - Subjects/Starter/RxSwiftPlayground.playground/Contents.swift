@@ -71,6 +71,68 @@ example(of: "enumerated and map") {
         .disposed(by: disposeBag)
 }
 
+// MARK: - Transforming inner observables
+
+struct Student {
+    let score: BehaviorSubject<Int>
+}
+
+example(of: "flatMap") {
+    let disposeBag = DisposeBag()
+
+    // 1
+    let laura = Student(score: BehaviorSubject(value: 80))
+    let charlotte = Student(score: BehaviorSubject(value: 90))
+
+    // 2
+    let student = PublishSubject<Student>()
+
+    // 3
+    student
+        .flatMap {
+            $0.score
+        }
+        // 4
+        .subscribe(onNext: {
+            print($0)
+        })
+        .disposed(by: disposeBag)
+
+    student.onNext(laura)
+    laura.score.onNext(85)
+
+    student.onNext(charlotte)
+
+    laura.score.onNext(95)
+    charlotte.score.onNext(100)
+}
+
+example(of: "flatMapLatest") {
+    let disposeBag = DisposeBag()
+
+    let laura = Student(score: BehaviorSubject(value: 80))
+    let charlotte = Student(score: BehaviorSubject(value: 90))
+
+    let student = PublishSubject<Student>()
+
+    student
+        .flatMapLatest {
+            $0.score
+        }
+        .subscribe(onNext: {
+            print($0)
+        })
+        .disposed(by: disposeBag)
+
+    student.onNext(laura)
+    laura.score.onNext(85)
+    student.onNext(charlotte)
+
+    // 1
+    laura.score.onNext(95)
+    charlotte.score.onNext(100)
+}
+
 /*:
  Copyright (c) 2019 Razeware LLC
 
