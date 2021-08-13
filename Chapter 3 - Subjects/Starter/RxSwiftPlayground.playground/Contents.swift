@@ -8,6 +8,69 @@ playgroundShouldContinueIndefinitely()
 // MARK: - Chapter 7 - Transforming Operators
 
 
+// MARK: - Transforming elements
+
+example(of: "toArray") {
+    let disposeBag = DisposeBag()
+
+    // 1
+    Observable.of("A", "B", "C")
+        // 2
+        .toArray()
+        .subscribe(onSuccess: {
+            print($0)
+        })
+        .disposed(by: disposeBag)
+}
+
+example(of: "map 1") {
+    let disposeBag = DisposeBag()
+
+    Observable.of(1, 2, 3)
+        .map { $0 * 2 }
+        .subscribe(onNext: {
+            print($0)
+        })
+        .disposed(by: disposeBag)
+}
+
+example(of: "map 2") {
+    let disposeBag = DisposeBag()
+
+    // 1
+    let formatter = NumberFormatter()
+    formatter.numberStyle = .spellOut
+
+    // 2
+    Observable<Int>.of(123, 4, 56)
+        // 3
+        .map {
+            formatter.string(for: $0) ?? ""
+        }
+        .subscribe(onNext: {
+            print($0)
+        })
+        .disposed(by: disposeBag)
+}
+
+example(of: "enumerated and map") {
+    let disposeBag = DisposeBag()
+
+    // 1
+    Observable.of(1, 2, 3, 4, 5, 6)
+        // 2
+        .enumerated()
+        // 3
+        .map { index, integer in
+            index > 2 ? integer * 2 : integer
+        }
+        // 4
+        .subscribe(onNext: {
+            print($0)
+        })
+        .disposed(by: disposeBag)
+}
+
 /*:
  Copyright (c) 2019 Razeware LLC
 
