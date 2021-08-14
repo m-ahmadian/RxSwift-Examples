@@ -5,219 +5,180 @@ import PlaygroundSupport
 
 playgroundShouldContinueIndefinitely()
 
-// MARK: - Chapter 7 - Transforming Operators
+// MARK: - Chapter 3 - Subjects
 
+// MARK: - Getting started
 
-// MARK: - Transforming elements
+example(of: "PublishSubject") {
+    let subject = PublishSubject<String>()
 
-example(of: "toArray") {
-    let disposeBag = DisposeBag()
+    subject.onNext("Is anyone listening?")
 
-    // 1
-    Observable.of("A", "B", "C")
-        // 2
-        .toArray()
-        .subscribe(onSuccess: {
-            print($0)
+    let subscriptionOne = subject.subscribe(
+        onNext: { string in
+            print(string)
         })
-        .disposed(by: disposeBag)
-}
 
-example(of: "map 1") {
-    let disposeBag = DisposeBag()
+    subject.on(.next("1"))
 
-    Observable.of(1, 2, 3)
-        .map { $0 * 2 }
-        .subscribe(onNext: {
-            print($0)
-        })
-        .disposed(by: disposeBag)
-}
+    subject.onNext("2")
 
-example(of: "map 2") {
-    let disposeBag = DisposeBag()
-
-    // 1
-    let formatter = NumberFormatter()
-    formatter.numberStyle = .spellOut
-
-    // 2
-    Observable<Int>.of(123, 4, 56)
-        // 3
-        .map {
-            formatter.string(for: $0) ?? ""
-        }
-        .subscribe(onNext: {
-            print($0)
-        })
-        .disposed(by: disposeBag)
-}
-
-example(of: "enumerated and map") {
-    let disposeBag = DisposeBag()
-
-    // 1
-    Observable.of(1, 2, 3, 4, 5, 6)
-        // 2
-        .enumerated()
-        // 3
-        .map { index, integer in
-            index > 2 ? integer * 2 : integer
-        }
-        // 4
-        .subscribe(onNext: {
-            print($0)
-        })
-        .disposed(by: disposeBag)
-}
-
-// MARK: - Transforming inner observables
-
-struct Student {
-    let score: BehaviorSubject<Int>
-}
-
-example(of: "flatMap") {
-    let disposeBag = DisposeBag()
-
-    // 1
-    let laura = Student(score: BehaviorSubject(value: 80))
-    let charlotte = Student(score: BehaviorSubject(value: 90))
-
-    // 2
-    let student = PublishSubject<Student>()
-
-    // 3
-    student
-        .flatMap {
-            $0.score
-        }
-        // 4
-        .subscribe(onNext: {
-            print($0)
-        })
-        .disposed(by: disposeBag)
-
-    student.onNext(laura)
-    laura.score.onNext(85)
-
-    student.onNext(charlotte)
-
-    laura.score.onNext(95)
-    charlotte.score.onNext(100)
-}
-
-example(of: "flatMapLatest") {
-    let disposeBag = DisposeBag()
-
-    let laura = Student(score: BehaviorSubject(value: 80))
-    let charlotte = Student(score: BehaviorSubject(value: 90))
-
-    let student = PublishSubject<Student>()
-
-    student
-        .flatMapLatest {
-            $0.score
-        }
-        .subscribe(onNext: {
-            print($0)
-        })
-        .disposed(by: disposeBag)
-
-    student.onNext(laura)
-    laura.score.onNext(85)
-    student.onNext(charlotte)
-
-    // 1
-    laura.score.onNext(95)
-    charlotte.score.onNext(100)
-}
-
-// MARK: - Observing events
-
-example(of: "materialize and dematerialize") {
-    // 1
-    enum MyError: Error {
-        case anError
+    let subscriptionTwo = subject.subscribe { event in
+        print("2)", event.element ?? event)
     }
 
-    let disposeBag = DisposeBag()
+    subject.onNext("3")
 
-    // 2
-    let laura = Student(score: BehaviorSubject(value: 80))
-    let charlotte = Student(score: BehaviorSubject(value: 100))
+    subscriptionOne.dispose()
 
-    let student = BehaviorSubject(value: laura)
+    subject.onNext("4")
 
     // 1
-    let studentScore = student
-        .flatMapLatest {
-            $0.score.materialize()
-        }
+    subject.onCompleted()
 
     // 2
-    studentScore
-        .subscribe(onNext: {
-            print($0)
-        })
-        .disposed(by: disposeBag)
+    subject.onNext("5")
 
     // 3
-    laura.score.onNext(85)
+    subscriptionTwo.dispose()
 
-    laura.score.onError(MyError.anError)
-
-    laura.score.onNext(90)
+    let disposeBag = DisposeBag()
 
     // 4
-    student.onNext(charlotte)
+    subject
+        .subscribe {
+            print("3)", $0.element ?? $0)
+        }
+        .disposed(by: disposeBag)
+
+    subject.onNext("?")
 }
 
-example(of: "materialize and dematerialize 2") {
-    // 1
-    enum MyError: Error {
-        case anError
-    }
 
+// MARK: - Working with behavior subjects
+
+// 1
+enum MyError: Error {
+    case anError
+}
+
+// 2
+func print<T: CustomDebugStringConvertible>(label: String, event: Event<T>) {
+    print(label, (event.element ?? event.error) ?? event)
+}
+
+// 3
+example(of: "BehaviorSubject") {
+    // 4
+    let subject = BehaviorSubject(value: "Initial value")
+    let disposeBag = DisposeBag()
+
+    subject.onNext("X")
+
+    subject
+        .subscribe {
+            print(label: "1)", event: $0)
+        }
+        .disposed(by: disposeBag)
+
+    // 1
+    subject.onError(MyError.anError)
+
+    // 2
+    subject.subscribe {
+        print(label: "2)", event: $0)
+    }
+    .disposed(by: disposeBag)
+}
+
+
+// MARK: - Working with replay subjects
+
+example(of: "ReplaySubject") {
+    // 1
+    let subject = ReplaySubject<String>.create(bufferSize: 2)
     let disposeBag = DisposeBag()
 
     // 2
-    let laura = Student(score: BehaviorSubject(value: 80))
-    let charlotte = Student(score: BehaviorSubject(value: 100))
+    subject.onNext("1")
+    subject.onNext("2")
+    subject.onNext("3")
 
-    let student = BehaviorSubject(value: laura)
-
-    let studentScore = student
-        .flatMapLatest {
-            $0.score.materialize()
+    // 3
+    subject
+        .subscribe {
+            print(label: "1)", event: $0)
         }
+        .disposed(by: disposeBag
+        )
 
-    // 1
-    studentScore
-        .filter({
-            guard $0.error == nil else {
-                print($0.error!)
-                return false
-            }
+    subject
+        .subscribe {
+            print(label: "2)", event: $0)
+        }
+        .disposed(by: disposeBag)
 
-            return true
-        })
-        // 2
-        .dematerialize()
+    subject.onNext("4")
+
+    subject.onError(MyError.anError)
+
+    subject.dispose()
+
+    subject
+        .subscribe {
+            print(label: "3)", event: $0)
+        }
+        .disposed(by: disposeBag)
+}
+
+
+// MARK: - Working with relays
+
+example(of: "PublishRelay") {
+    let relay = PublishRelay<String>()
+
+    let disposeBag = DisposeBag()
+
+    relay.accept("Knock knock, anyone home?")
+
+    relay
         .subscribe(onNext: {
             print($0)
         })
         .disposed(by: disposeBag)
 
+    relay.accept("1")
+}
+
+
+example(of: "BehaviorRelay") {
+    // 1
+    let relay = BehaviorRelay(value: "Initial Value")
+    let disposeBag = DisposeBag()
+
+    // 2
+    relay.accept("New initial value")
+
     // 3
-    laura.score.onNext(85)
+    relay
+        .subscribe {
+            print(label: "1)", event: $0)
+        }
+        .disposed(by: disposeBag)
 
-    laura.score.onError(MyError.anError)
+    // 1
+    relay.accept("1")
 
-    laura.score.onNext(90)
+    // 2
+    relay
+        .subscribe {
+            print(label: "2)", event: $0)
+        }
+        .disposed(by: disposeBag)
 
-    // 4
-    student.onNext(charlotte)
+    relay.accept("2")
+
+    print(relay.value)
 }
 
 /*:
