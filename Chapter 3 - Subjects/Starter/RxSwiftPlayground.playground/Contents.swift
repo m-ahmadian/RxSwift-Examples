@@ -133,6 +133,93 @@ example(of: "flatMapLatest") {
     charlotte.score.onNext(100)
 }
 
+// MARK: - Observing events
+
+example(of: "materialize and dematerialize") {
+    // 1
+    enum MyError: Error {
+        case anError
+    }
+
+    let disposeBag = DisposeBag()
+
+    // 2
+    let laura = Student(score: BehaviorSubject(value: 80))
+    let charlotte = Student(score: BehaviorSubject(value: 100))
+
+    let student = BehaviorSubject(value: laura)
+
+    // 1
+    let studentScore = student
+        .flatMapLatest {
+            $0.score.materialize()
+        }
+
+    // 2
+    studentScore
+        .subscribe(onNext: {
+            print($0)
+        })
+        .disposed(by: disposeBag)
+
+    // 3
+    laura.score.onNext(85)
+
+    laura.score.onError(MyError.anError)
+
+    laura.score.onNext(90)
+
+    // 4
+    student.onNext(charlotte)
+}
+
+example(of: "materialize and dematerialize 2") {
+    // 1
+    enum MyError: Error {
+        case anError
+    }
+
+    let disposeBag = DisposeBag()
+
+    // 2
+    let laura = Student(score: BehaviorSubject(value: 80))
+    let charlotte = Student(score: BehaviorSubject(value: 100))
+
+    let student = BehaviorSubject(value: laura)
+
+    let studentScore = student
+        .flatMapLatest {
+            $0.score.materialize()
+        }
+
+    // 1
+    studentScore
+        .filter({
+            guard $0.error == nil else {
+                print($0.error!)
+                return false
+            }
+
+            return true
+        })
+        // 2
+        .dematerialize()
+        .subscribe(onNext: {
+            print($0)
+        })
+        .disposed(by: disposeBag)
+
+    // 3
+    laura.score.onNext(85)
+
+    laura.score.onError(MyError.anError)
+
+    laura.score.onNext(90)
+
+    // 4
+    student.onNext(charlotte)
+}
+
 /*:
  Copyright (c) 2019 Razeware LLC
 
