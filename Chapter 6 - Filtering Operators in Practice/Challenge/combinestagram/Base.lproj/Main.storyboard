@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="RMx-3f-FxP">
-    <device id="retina4_0" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -23,7 +21,7 @@
             </objects>
             <point key="canvasLocation" x="-38" y="-630"/>
         </scene>
-        <!--Combinestagram-->
+        <!--Chapter 6 - Challenge - Combinestagram-->
         <scene sceneID="psc-5k-bru">
             <objects>
                 <viewController storyboardIdentifier="MainViewController" id="iXO-Bu-Lsj" customClass="MainViewController" customModule="Combinestagram" customModuleProvider="target" sceneMemberID="viewController">
@@ -32,11 +30,11 @@
                         <viewControllerLayoutGuide type="bottom" id="5p5-Fh-3QH"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="jrW-hL-WKx">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zp0-a0-4Ju">
-                                <rect key="frame" x="40" y="386" width="80" height="80"/>
+                                <rect key="frame" x="110" y="410" width="80" height="80"/>
                                 <color key="backgroundColor" red="0.67817674250000004" green="0.88699919869999999" blue="0.54654333939999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="80" id="V7Z-O6-Ar2"/>
@@ -54,7 +52,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kxB-yd-P8e">
-                                <rect key="frame" x="200" y="386" width="80" height="80"/>
+                                <rect key="frame" x="410" y="410" width="80" height="80"/>
                                 <color key="backgroundColor" name="selectedControlColor" catalog="System" colorSpace="catalog"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="80" id="0fA-c1-O9l"/>
@@ -72,7 +70,7 @@
                                 </connections>
                             </button>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="bih-xf-PNW">
-                                <rect key="frame" x="16" y="108" width="288" height="210"/>
+                                <rect key="frame" x="20" y="120" width="560" height="210"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="210" id="Sm9-rR-Th4"/>
                                 </constraints>
@@ -98,7 +96,7 @@
                             <constraint firstItem="zp0-a0-4Ju" firstAttribute="centerY" secondItem="jrW-hL-WKx" secondAttribute="centerY" multiplier="1.5" id="xJS-AR-SfF"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Combinestagram" id="E09-hM-Eum">
+                    <navigationItem key="navigationItem" title="Chapter 6 - Challenge - Combinestagram" id="E09-hM-Eum">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="XF1-i7-ele">
                             <connections>
                                 <action selector="actionAdd" destination="iXO-Bu-Lsj" id="Nju-qq-y7r"/>
@@ -121,7 +119,7 @@
             <objects>
                 <collectionViewController storyboardIdentifier="PhotosViewController" title="Add Photos" id="cnn-si-zOT" customClass="PhotosViewController" customModule="Combinestagram" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" prefetchingEnabled="NO" id="MOW-5g-qw8">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="h1R-64-kh4">

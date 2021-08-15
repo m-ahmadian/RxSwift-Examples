@@ -1,7 +1,7 @@
 use_frameworks!
 platform :ios, '14.5'
 
-target 'Combinestagram' do
+target 'Chapter 6 - Challenge - Combinestagram' do
     pod 'RxSwift'
     pod 'RxCocoa'
 end

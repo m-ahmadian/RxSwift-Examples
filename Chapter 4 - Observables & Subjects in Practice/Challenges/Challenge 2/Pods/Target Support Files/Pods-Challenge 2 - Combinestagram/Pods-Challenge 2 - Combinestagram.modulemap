@@ -1,0 +1,6 @@
+framework module Pods_Challenge_2___Combinestagram {
+  umbrella header "Pods-Challenge 2 - Combinestagram-umbrella.h"
+
+  export *
+  module * { export * }
+}

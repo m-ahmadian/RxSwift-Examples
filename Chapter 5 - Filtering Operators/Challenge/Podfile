@@ -1,7 +1,7 @@
-use_frameworks!
-platform :ios, '14.5'
+platform :ios, '9.0'
 
-target 'RxSwiftProject' do
-    pod 'RxSwift'
-    pod 'RxCocoa'
+target 'Chapter 5 - Challenge - RxSwiftProject' do
+  use_frameworks!
+  pod 'RxSwift'  
+  pod 'RxCocoa'
 end
