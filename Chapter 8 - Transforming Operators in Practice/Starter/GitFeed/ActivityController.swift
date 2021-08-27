@@ -73,6 +73,23 @@ class ActivityController: UITableViewController {
         return URLSession.shared.rx.response(request: request)
       }
       .share(replay: 1)
+
+    response
+      .filter { response, _ in
+        return 200..<300 ~= response.statusCode
+      }
+      .map { _, data -> [Event] in
+        let decoder = JSONDecoder()
+        let events = try? decoder.decode([Event].self, from: data)
+        return events ?? []
+      }
+      .map { objects in
+        return !objects.isEmpty
+      }
+      .subscribe(onNext: { [weak self] newEvents in
+        self?.processEvents(newEvents)
+      })
+      .disposed(by: bag)
   }
   
   func processEvents(_ newEvents: [Event]) {
