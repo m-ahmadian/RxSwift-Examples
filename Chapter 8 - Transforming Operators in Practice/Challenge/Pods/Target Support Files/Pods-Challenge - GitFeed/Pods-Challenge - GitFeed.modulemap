@@ -1,0 +1,6 @@
+framework module Pods_Challenge___GitFeed {
+  umbrella header "Pods-Challenge - GitFeed-umbrella.h"
+
+  export *
+  module * { export * }
+}
