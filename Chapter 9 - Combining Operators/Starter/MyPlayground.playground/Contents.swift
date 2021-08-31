@@ -7,6 +7,62 @@ playgroundShouldContinueIndefinitely()
 
 // MARK: - Chapter 9 - Combining Operators
 
+// MARK: - Prefixing and concatenating
+
+example(of: "startWith") {
+    // 1
+    let numbers = Observable.of(2, 3, 4)
+
+    // 2
+    let observable = numbers.startWith(1)
+    _ = observable.subscribe(onNext: {value in
+        print(value)
+    })
+}
+
+example(of: "Observable.concat") {
+    // 1
+    let first = Observable.of(1, 2, 3)
+    let second = Observable.of(4, 5, 6)
+
+    // 2
+    let observable = Observable.concat([first, second])
+
+    observable.subscribe(onNext: { value in
+        print(value)
+    })
+}
+
+example(of: "concat") {
+    let germanCities = Observable.of("Berlin", "Munich", "Frankfurt")
+    let spanishCities = Observable.of("Madrid", "Barcelona", "Valencia")
+
+    let observable = germanCities.concat(spanishCities)
+    _ = observable.subscribe(onNext: { value in
+        print(value)
+    })
+}
+
+example(of: "concatMap") {
+    // 1
+    let sequences = [
+        "German cities": Observable.of("Berlin", "Munich", "Frankfurt"),
+        "Spanish cities": Observable.of("Madrid", "Barcelona", "Valencia")
+    ]
+
+    // 2
+    let observable = Observable.of("German cities", "Spanish cities")
+        .concatMap { country in
+            sequences[country] ?? .empty()
+    }
+
+    // 3
+    _ = observable.subscribe(onNext: { string in
+        print(string)
+    })
+    
+}
+
 /*:
  Copyright (c) 2019 Razeware LLC
  Permission is hereby granted, free of charge, to any person obtaining a copy
