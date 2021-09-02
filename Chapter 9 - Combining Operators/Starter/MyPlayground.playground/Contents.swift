@@ -167,6 +167,45 @@ example(of: "zip") {
     })
 }
 
+// MARK: - Triggers
+
+example(of: "withLatestFrom") {
+    // 1
+    let button = PublishSubject<Void>()
+    let textField = PublishSubject<String>()
+
+    // 2
+    let observable = button.withLatestFrom(textField)
+    _ = observable.subscribe(onNext: { value in
+        print(value)
+    })
+
+    // 3
+    textField.onNext("Par")
+    textField.onNext("Pari")
+    textField.onNext("Paris")
+    button.onNext(())
+    button.onNext(())
+}
+
+example(of: "sample") {
+    let button = PublishSubject<Void>()
+    let textField = PublishSubject<String>()
+
+    let observable = textField.sample(button)
+    _ = observable.subscribe(onNext: { value in
+        print(value)
+    })
+
+    textField.onNext("Par")
+    textField.onNext("Pari")
+    textField.onNext("Paris")
+    button.onNext(())
+    button.onNext(())
+}
+
+// Don't forget that withLatestFrom(_:) takes the data observable as a parameter, while sample(_:) takes the trigger observable as a parameter. 
+
 /*:
  Copyright (c) 2019 Razeware LLC
  Permission is hereby granted, free of charge, to any person obtaining a copy
