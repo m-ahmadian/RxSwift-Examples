@@ -204,7 +204,63 @@ example(of: "sample") {
     button.onNext(())
 }
 
-// Don't forget that withLatestFrom(_:) takes the data observable as a parameter, while sample(_:) takes the trigger observable as a parameter. 
+// Don't forget that withLatestFrom(_:) takes the data observable as a parameter, while sample(_:) takes the trigger observable as a parameter.
+
+// MARK: - Switches
+
+example(of: "amb") {
+    let left = PublishSubject<String>()
+    let right = PublishSubject<String>()
+
+    // 1
+    let observable = left.amb(right)
+    _ = observable.subscribe(onNext: { value in
+        print(value)
+    })
+
+    // 2
+    left.onNext("Lisbon")
+    right.onNext("Copenhagen")
+    left.onNext("London")
+    left.onNext("Madrid")
+    right.onNext("Vienna")
+
+    left.onCompleted()
+    right.onCompleted()
+}
+
+example(of: "switchLatest") {
+    // 1
+    let one = PublishSubject<String>()
+    let two = PublishSubject<String>()
+    let three = PublishSubject<String>()
+
+    let source = PublishSubject<Observable<String>>()
+
+    // 2
+    let observable = source.switchLatest()
+    let disposable = observable.subscribe(onNext: { value in
+        print(value)
+    })
+
+    source.onNext(one)
+    one.onNext("Some text from sequence one")
+    two.onNext("Some text from sequence two")
+
+    source.onNext(two)
+    two.onNext("More text from sequence two")
+    one.onNext("and also from sequence one")
+
+    source.onNext(three)
+    two.onNext("Why don't you see me?")
+    one.onNext("I'm alone, help me")
+    three.onNext("Hey it's three. I win.")
+
+    source.onNext(one)
+    one.onNext("Nope. It's me, one!")
+
+    disposable.dispose()
+}
 
 /*:
  Copyright (c) 2019 Razeware LLC
