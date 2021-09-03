@@ -262,6 +262,38 @@ example(of: "switchLatest") {
     disposable.dispose()
 }
 
+// MARK: - Combining elements within a sequence
+
+example(of: "reduce") {
+    let source = Observable.of(1, 3, 5, 7, 9)
+
+    // 1
+    let observable = source.reduce(0, accumulator: +)
+    _ = observable.subscribe(onNext: { value in
+        print(value)
+    })
+}
+
+example(of: "another reduce") {
+    let source = Observable.of(1, 3, 5, 7, 9)
+
+    let observable = source.reduce(0) { summary, newValue in
+        return summary + newValue
+    }
+    _ = observable.subscribe(onNext: { value in
+        print(value)
+    })
+}
+
+example(of: "scan") {
+    let source = Observable.of(1, 3, 5, 7, 9)
+
+    let observable = source.scan(0, accumulator: +)
+    _ = observable.subscribe(onNext: { value in
+        print(value)
+    })
+}
+
 /*:
  Copyright (c) 2019 Razeware LLC
  Permission is hereby granted, free of charge, to any person obtaining a copy
