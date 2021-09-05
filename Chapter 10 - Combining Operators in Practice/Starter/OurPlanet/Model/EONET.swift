@@ -35,6 +35,15 @@ class EONET {
   static let categoriesEndpoint = "/categories"
   static let eventsEndpoint = "/events"
 
+  static var categories: Observable<[EOCategory]> = {
+    let request: Observable<[EOCategory]> = EONET.request(endpoint: categoriesEndpoint, contentIdentifier: "categories")
+
+    return request
+      .map { categories in categories.sorted { $0.name < $1.name } }
+      .catchAndReturn([])
+      .share(replay: 1, scope: .forever)
+  }()
+
   static func jsonDecoder(contentIdentifier: String) -> JSONDecoder {
     let decoder = JSONDecoder()
     decoder.userInfo[.contentIdentifier] = contentIdentifier
