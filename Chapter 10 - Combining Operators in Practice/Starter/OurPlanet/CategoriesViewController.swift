@@ -81,8 +81,9 @@ class CategoriesViewController: UIViewController, UITableViewDataSource, UITable
     let cell = tableView.dequeueReusableCell(withIdentifier: "categoryCell")!
 
     let category = categories.value[indexPath.row]
-    cell.textLabel?.text = category.name
+    cell.textLabel?.text = "\(category.name) (\(category.events.count))"
     cell.detailTextLabel?.text = category.description
+    cell.accessoryType = (category.events.count > 0) ? .disclosureIndicator : .none
 
     return cell
   }
