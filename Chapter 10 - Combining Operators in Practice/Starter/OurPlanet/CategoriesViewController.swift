@@ -53,7 +53,21 @@ class CategoriesViewController: UIViewController, UITableViewDataSource, UITable
 
   func startDownload() {
     let eoCategories = EONET.categories
+    let downloadedEvents = EONET.events(forLast: 360)
+
+    let updatedCategories = Observable
+      .combineLatest(eoCategories, downloadedEvents) { (categories, events) -> [EOCategory] in
+        return categories.map { category in
+          var cat = category
+          cat.events = events.filter {
+            $0.categories.contains(where: { $0.id == category.id })
+          }
+          return cat
+        }
+      }
+
     eoCategories
+      .concat(updatedCategories)
       .bind(to: categories)
       .disposed(by: disposeBag)
   }
