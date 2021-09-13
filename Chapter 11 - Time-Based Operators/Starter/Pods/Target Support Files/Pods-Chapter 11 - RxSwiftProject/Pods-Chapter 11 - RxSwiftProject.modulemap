@@ -1,0 +1,6 @@
+framework module Pods_Chapter_11___RxSwiftProject {
+  umbrella header "Pods-Chapter 11 - RxSwiftProject-umbrella.h"
+
+  export *
+  module * { export * }
+}
