@@ -43,7 +43,7 @@ let sourceObservable = Observable<Int>.create { observer in
         timer.suspend()
     }
 }
-.replay(replayedElements)
+.replayAll()
 
 let sourceTimeline = TimelineView<Int>.make()
 let replayedTimeline = TimelineView<Int>.make()
