@@ -3,7 +3,7 @@ import RxSwift
 import RxCocoa
 
 let elementsPerSecond = 1
-let delayInSeconds: RxTimeInterval = 1.5
+let delayInSeconds: RxTimeInterval = RxTimeInterval.seconds(Int(1.5))
 
 let sourceObservable = PublishSubject<Int>()
 
@@ -30,7 +30,11 @@ _ = sourceObservable.subscribe(sourceTimeline)
 
 // Start coding here
 
+// MARK: - Delayed subscriptions
 
+_ = sourceObservable
+    .delaySubscription(delayInSeconds, scheduler: MainScheduler.instance)
+    .subscribe(delayedTimeline)
 
 let hostView = setupHostView()
 hostView.addSubview(stack)
