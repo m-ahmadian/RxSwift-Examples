@@ -32,8 +32,12 @@ _ = sourceObservable.subscribe(sourceTimeline)
 
 // MARK: - Delayed subscriptions
 
+//_ = sourceObservable
+//    .delaySubscription(delayInSeconds, scheduler: MainScheduler.instance)
+//    .subscribe(delayedTimeline)
+
 _ = sourceObservable
-    .delaySubscription(delayInSeconds, scheduler: MainScheduler.instance)
+    .delay(delayInSeconds, scheduler: MainScheduler.instance)
     .subscribe(delayedTimeline)
 
 let hostView = setupHostView()
