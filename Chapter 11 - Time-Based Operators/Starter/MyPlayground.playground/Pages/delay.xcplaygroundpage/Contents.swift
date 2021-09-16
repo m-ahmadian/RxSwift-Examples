@@ -36,8 +36,15 @@ _ = sourceObservable.subscribe(sourceTimeline)
 //    .delaySubscription(delayInSeconds, scheduler: MainScheduler.instance)
 //    .subscribe(delayedTimeline)
 
-_ = sourceObservable
-    .delay(delayInSeconds, scheduler: MainScheduler.instance)
+//_ = sourceObservable
+//    .delay(delayInSeconds, scheduler: MainScheduler.instance)
+//    .subscribe(delayedTimeline)
+
+_ = Observable<Int>
+    .timer(RxTimeInterval.seconds(Int(3)), scheduler: MainScheduler.instance)
+    .flatMap { _ in
+        sourceObservable.delay(delayInSeconds, scheduler: MainScheduler.instance)
+    }
     .subscribe(delayedTimeline)
 
 let hostView = setupHostView()
