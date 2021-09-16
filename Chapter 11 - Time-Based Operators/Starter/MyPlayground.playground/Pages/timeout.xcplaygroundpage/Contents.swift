@@ -22,6 +22,31 @@ class TimelineView<E>: TimelineViewBase, ObserverType where E: CustomStringConve
     }
   }
 }
+
+// MARK: - Timeouts
+
+let button = UIButton(type: .system)
+button.setTitle("Press me now!", for: .normal)
+button.sizeToFit()
+
+let tapsTimeline = TimelineView<String>.make()
+
+let stack = UIStackView.makeVertical([
+    button,
+    UILabel.make("Taps on button above"),
+    tapsTimeline])
+
+let _ = button
+    .rx.tap
+    .map { _ in "." }
+//    .timeout(RxTimeInterval.seconds(5), scheduler: MainScheduler.instance)
+    .timeout(RxTimeInterval.seconds(5), other: Observable.just("X"), scheduler: MainScheduler.instance)
+    .subscribe(tapsTimeline)
+
+let hostView = setupHostView()
+hostView.addSubview(stack)
+hostView
+
 /*:
  Copyright (c) 2019 Razeware LLC
 
