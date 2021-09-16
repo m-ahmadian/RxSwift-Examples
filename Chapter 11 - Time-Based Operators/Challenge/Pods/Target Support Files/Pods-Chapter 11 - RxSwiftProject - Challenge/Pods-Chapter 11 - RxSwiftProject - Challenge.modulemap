@@ -1,0 +1,6 @@
+framework module Pods_Chapter_11___RxSwiftProject___Challenge {
+  umbrella header "Pods-Chapter 11 - RxSwiftProject - Challenge-umbrella.h"
+
+  export *
+  module * { export * }
+}
